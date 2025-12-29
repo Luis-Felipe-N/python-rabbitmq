@@ -1,18 +1,23 @@
 import pika
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def callback(ch, method, properties, body):
-    message = json.loads(body)
-    print(f"Received message: {message}")
+    message = body.decode("utf-8")
+    formatted_message = json.loads(message)
+    print(f"Received message: {formatted_message}")
 
 
 class RabbitMqConsumer:
     def __init__(self) -> None:
-        self.__host = "localhost"
-        self.__port = 5672
-        self.__username = "guest"
-        self.__password = "guest"
+        self.__host = os.getenv("RABBITMQ_HOST", "localhost")
+        self.__port = int(os.getenv("RABBITMQ_PORT", "5672"))
+        self.__username = os.getenv("RABBITMQ_USERNAME", "guest")
+        self.__password = os.getenv("RABBITMQ_PASSWORD", "guest")
         self.__queue = "default_queue"
         self.__routing_key = "default_routing_key"
         self.__channel = self.create_channel()
