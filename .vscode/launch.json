@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Consumer",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/run.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: Publisher",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/publisher.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
