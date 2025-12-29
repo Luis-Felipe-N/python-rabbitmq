@@ -13,7 +13,7 @@ class RabbitMqPublisher:
         self.__username = os.getenv("RABBITMQ_USERNAME", "guest")
         self.__password = os.getenv("RABBITMQ_PASSWORD", "guest")
         self.__exvhange = "default_exchange"
-        self.__routing_key = "default_routing_key"
+        self.__routing_key = ""
         self.__channel = self.create_channel()
 
     def create_channel(self):

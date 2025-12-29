@@ -1,15 +1,10 @@
 import pika
-import json
 import os
 from dotenv import load_dotenv
 
+from .callback import rabbitmq_callback
+
 load_dotenv()
-
-
-def callback(ch, method, properties, body):
-    message = body.decode("utf-8")
-    formatted_message = json.loads(message)
-    print(f"Received message: {formatted_message}")
 
 
 class RabbitMqConsumer:
@@ -19,7 +14,7 @@ class RabbitMqConsumer:
         self.__username = os.getenv("RABBITMQ_USERNAME", "guest")
         self.__password = os.getenv("RABBITMQ_PASSWORD", "guest")
         self.__queue = "default_queue"
-        self.__routing_key = "default_routing_key"
+        self.__routing_key = ""
         self.__channel = self.create_channel()
 
     def create_channel(self):
@@ -37,9 +32,14 @@ class RabbitMqConsumer:
             queue=self.__queue,
             durable=True
         )
+        channel.queue_bind(
+            exchange="default_exchange",
+            queue=self.__queue,
+            routing_key=self.__routing_key
+        )
         channel.basic_consume(
             queue=self.__queue,
-            on_message_callback=callback,
+            on_message_callback=rabbitmq_callback,
             auto_ack=True
         )
 
